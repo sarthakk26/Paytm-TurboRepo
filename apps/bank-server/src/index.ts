@@ -25,25 +25,29 @@ app.post("/bank/pay", async (req, res) => {
     };
     //Now GENERATING HMAC SIGNATURE
     const signature = crypto
-    .createHmac("sha256",SECRET)
-    .update(JSON.stringify(payload))
-    .digest("hex");
+        .createHmac("sha256", SECRET)
+        .update(JSON.stringify(payload))
+        .digest("hex");
 
     console.log("Signature at bank:", signature)
-    
-    try {
-        await axios.post(WEBHOOK_URL, payload, {
-            headers:{
-                "x-bank-signature": signature
-            }
-        });
-        res.json({message:"Webhook delivered"});
-    }catch(err: any){
-        console.error("Webhook Failed:",err.message);
-        res.status(500).json({message:"Failed to send webhook"})
-    }
+    const delay = Math.floor(Math.random() * 4000) + 1000;
+    res.json({ message: "Payment processing started", delay });
+
+    setTimeout(async () => {
+        try {
+            await axios.post(WEBHOOK_URL, payload, {
+                headers: {
+                    "x-bank-signature": signature
+                }
+            });
+            console.log("Webhook delivered after delay:",delay );
+        } catch (err: any) {
+            console.error("Webhook Failed:", err.message);
+            res.status(500).json({ message: "Failed to send webhook" })
+        }
+    }, delay)
 });
 
-app.listen(8000, ()=>{
+app.listen(8000, () => {
     console.log("Dummy Bank Server running on port 8000")
 })

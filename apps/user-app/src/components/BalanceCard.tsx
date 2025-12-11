@@ -1,27 +1,19 @@
 import { Card } from "@repo/ui";
+import { getBalance } from "@/lib/action/getBalance";
 
-export const BalanceCard = ({
-  amount,
-  locked,
-}: {
-  amount: number;
-  locked: number;
-}) => {
+export const BalanceCard =  async() => {
+  const balance = await getBalance();
+  const totalBalance = balance;
   return (
-    //removed /100 from all 3 
-    <Card title="Balance">
-      <div className="flex justify-between border-b border-slate-300 pb-2">
-        <div>Unlocked balance</div>
-        <div>{amount} INR</div>
+    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-full flex flex-col justify-between">
+      <div>
+        <h2 className="text-lg font-medium text-gray-600 mb-4">Total Balance</h2>
+        <div className="flex items-center gap-4">
+          <span className="text-4xl font-bold text-gray-900">
+            ₹ {totalBalance.amount}
+          </span>
+        </div>
       </div>
-      <div className="flex justify-between border-b border-slate-300 py-2">
-        <div>Total Locked Balance</div>
-        <div>{locked} INR</div>
-      </div>
-      <div className="flex justify-between border-b border-slate-300 py-2">
-        <div>Total Balance</div>
-        <div>{(locked + amount)} INR</div>
-      </div>
-    </Card>
+    </div>
   );
 };

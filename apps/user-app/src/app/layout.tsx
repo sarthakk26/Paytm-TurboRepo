@@ -2,7 +2,6 @@ import "./globals.css";
 import { Providers } from "@/providers/providers";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { AppbarClient } from "@/components/AppbarClient";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,9 +17,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} antialiased min-h-screen bg-[#ebe6e6]`}>
         <Providers>
-          <AppbarClient />
           {children}
         </Providers>
       </body>

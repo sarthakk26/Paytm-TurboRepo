@@ -25,7 +25,7 @@ export async function p2pTransfer(to: string, amount: number) {
     };
   }
 
-  await db.$transaction(async (tx) => {
+  return await db.$transaction(async (tx) => {
     //Row locking to prevent race condition of concurrent transactions
     await tx.$queryRaw`
       SELECT * FROM "Balance" 
@@ -64,7 +64,7 @@ export async function p2pTransfer(to: string, amount: number) {
         // timestamp automatically set by @default(now())
       },
     });
-
+    
     return { message: "Transfer successful" };
 
   });
